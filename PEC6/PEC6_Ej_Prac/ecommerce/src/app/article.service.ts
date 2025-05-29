@@ -20,19 +20,20 @@ export class ArticleService {
     return ObservableOf(this.articles);
   }
 
-  createArticle(article: Article): Observable<any>{
+  createArticle(article: any): Observable<any>{
     let foundArticle = this.articles.find(each => each.name === article.name);
     if (foundArticle) {
       console.log('Article already exists');
       return ObservableThrow({msg: 'Article already exists'});
     }
-    this.articles.push(article);
+    const newArticle = new Article(article.name, article.url, article.price, article.onSale, article.quantityInCart);
+    this.articles.push(newArticle);
     console.log(this.articles);
     console.log('Article created');
     return ObservableOf({msg: 'Article created'});
   }
 
-  changeQuantity(nameArticle: string, units: number): Observable<any> {
+  changeQuantity(nameArticle: string, units: number): Observable<Article> {
     let foundArticle = this.articles.find(each => each.name === nameArticle);
     if (foundArticle) {
       foundArticle.quantityInCart = units;
