@@ -14,6 +14,7 @@ export class ArticleNewReactiveComponent {
 
   public articleForm: FormGroup;
   public article: Article;
+  public message = null;
 
   constructor(private fb: FormBuilder, private articleService: ArticleService) {
     this.createForm();
@@ -37,8 +38,13 @@ export class ArticleNewReactiveComponent {
       else {
         articleToCreate['quantityInCart'] = 0;
       }
-      console.log(articleToCreate);
-      this.articleService.createArticle(articleToCreate);
+      //console.log(articleToCreate);
+      this.articleService.createArticle(articleToCreate).subscribe((result: any) => {
+        this.message = result.msg;
+        this.article = new Article('test-article', '', 0, false, 0);
+      }, (err: { msg: any; }) => {
+        this.message = err.msg;
+      })
     } else {
       console.log("Invalid form");
     }
