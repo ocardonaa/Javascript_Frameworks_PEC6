@@ -27,6 +27,11 @@ export class ArticleItemComponent implements OnInit {
 
   }
 
+  onChangeQuantity(event: Event, change: number) {
+    event.preventDefault();
+    this.emitData(change);
+  }
+
   ngOnInit() {
     this.articleClasses = {
       'available': this.article.isOnSale,

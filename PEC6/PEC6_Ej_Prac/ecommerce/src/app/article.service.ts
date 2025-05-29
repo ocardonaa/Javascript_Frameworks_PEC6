@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Article } from './model/article';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,26 +17,30 @@ export class ArticleService {
   }
 
   getArticles(): Observable<Article[]> {
-    return this.articles;
+    return of(this.articles);
   }
 
   createArticle(article: Article): Observable<Article>{
     let foundArticle = this.articles.find(each => each.name === article.name);
     if (foundArticle) {
-      return false;
+      return of(false);
     }
     this.articles.push(article);
-    return true;
+    console.log(this.articles);
+    return of(true);
   }
 
-  changeQuantity(articleName: string, changeInQuantity: number): Observable<any> {
-    let foundArticle = this.articles.find(article => article.name === articleName);
+  changeQuantity(nameArticle: string, units: number): Observable<any> {
+    let foundArticle = this.articles.find(each => each.name === nameArticle);
     if (foundArticle) {
-      foundArticle.quantityInCart = changeInQuantity;
-      return true;
+      foundArticle.quantityInCart = units;
+      if(foundArticle.quantityInCart < 0) {
+        foundArticle.quantityInCart = 0;
+      }
+      return of(true);
     }
     else {
-      return false;
+      return of(false);
     }
   }
 }

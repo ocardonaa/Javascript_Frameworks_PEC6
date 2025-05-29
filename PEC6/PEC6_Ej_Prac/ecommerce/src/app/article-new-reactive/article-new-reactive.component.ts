@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ArticleService } from '../article.service';
 import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl, FormBuilder } from '@angular/forms';
+import { Article } from '../model/article';
 
 @Component({
   selector: 'app-article-new-reactive',
@@ -11,8 +13,9 @@ import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl, FormB
 export class ArticleNewReactiveComponent {
 
   public articleForm: FormGroup;
+  public article: Article;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private articleService: ArticleService) {
     this.createForm();
   }
 
@@ -21,12 +24,24 @@ export class ArticleNewReactiveComponent {
       name: new FormControl(null, [Validators.required, this.NameArticleValidator]),
       url: new FormControl(null, [Validators.required, this.urlValidator]),
       onSale: new FormControl(false),
-      price: new FormControl(null, [Validators.required, this.priceValidator,  Validators.min(0.1)])
+      price: new FormControl(null, [Validators.required, this.priceValidator, Validators.min(0.1)])
     })
   }
 
   onSubmit() {
-    this.articleForm.valid ? console.log(this.articleForm.value) : console.log("Invalid form");
+    if (this.articleForm.valid) {
+      const articleToCreate = this.articleForm.value;
+      if (articleToCreate.onSale) {
+        articleToCreate['quantityInCart'] = 1;
+      }
+      else {
+        articleToCreate['quantityInCart'] = 0;
+      }
+      console.log(articleToCreate);
+      this.articleService.createArticle(articleToCreate);
+    } else {
+      console.log("Invalid form");
+    }
   }
 
   priceValidator: ValidatorFn = (control: AbstractControl) => {
@@ -38,14 +53,14 @@ export class ArticleNewReactiveComponent {
   };
 
   urlValidator: ValidatorFn = (control: AbstractControl) => {
-      const url = control.value;
-      if (!url) {
-        return null;
-      }
-      const pattern = /^https?:\/\/[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}(\/[a-zA-Z0-9.\-]*)*$/;
-      const valid = pattern.test(url);
-      return valid ? null : { invalidUrl: true };
-    };
+    const url = control.value;
+    if (!url) {
+      return null;
+    }
+    const pattern = /^https?:\/\/[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}(\/[a-zA-Z0-9.\-]*)*$/;
+    const valid = pattern.test(url);
+    return valid ? null : { invalidUrl: true };
+  };
 
   NameArticleValidator: ValidatorFn = (control: AbstractControl) => {
     const forbiddenNames = ['Prueba', 'Test', 'Mock', 'Fake'];

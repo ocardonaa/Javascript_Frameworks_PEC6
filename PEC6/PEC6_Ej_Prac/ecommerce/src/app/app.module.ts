@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { ArticleNewTemplateComponent } from './article-new-template/article-new-template.component';
 import { ArticleNewReactiveComponent } from './article-new-reactive/article-new-reactive.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { ArticleService } from './article.service';
 
 @NgModule({
   declarations: [
@@ -28,9 +29,7 @@ import { InicioComponent } from './inicio/inicio.component';
     RouterModule,
     ReactiveFormsModule
   ],
-  providers: [
-    provideClientHydration()
-  ],
+  providers: [ArticleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

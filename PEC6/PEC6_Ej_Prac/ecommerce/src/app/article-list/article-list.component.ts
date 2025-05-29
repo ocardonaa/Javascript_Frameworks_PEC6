@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Article } from '../model/article';
+import { ArticleService } from '../article.service';
 import { ArticleQuantityChange } from '../model/ArticleQuantityChange';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-article-list',
   template: `
             <div class="container">
-                <app-article-item (emitQuantityChange)='onRecievedData($event)' *ngFor="let article of articles" [article]="article"></app-article-item>
+                <app-article-item (emitQuantityChange)='onChangeQuantity($event)' *ngFor="let article of articles$ | async" [article]="article"></app-article-item>
             </div>
             `,
   styles: [
@@ -22,19 +24,18 @@ import { ArticleQuantityChange } from '../model/ArticleQuantityChange';
           `
   ]
 })
-export class ArticleListComponent {
+export class ArticleListComponent implements OnInit {
 
-  recievedQuantityChange: ArticleQuantityChange;
+  public articles$: Observable<Article[]>;
 
-  onRecievedData(data: ArticleQuantityChange) {
-    this.recievedQuantityChange = data;
-    this.recievedQuantityChange.article.quantityInCart = this.recievedQuantityChange.units < 1 ? 0 : this.recievedQuantityChange.units;
-    console.log(this.recievedQuantityChange);
+  constructor(private articleService: ArticleService) {}
+
+  ngOnInit() {
+    this.articles$ = this.articleService.getArticles();
   }
 
-  articles: Article[] = [
-    new Article('Football Ball', 'https://media.istockphoto.com/id/91712739/es/foto/pelota-de-f%C3%BAtbol.jpg?s=612x612&w=0&k=20&c=YTrM0cjnsDMBagE47GTiHxDtE00Mb3v27jvD_yyxyfk=', 10, true, 1),
-    new Article('Basketball Ball', 'https://http2.mlstatic.com/D_NQ_NP_756138-MLA75912369814_042024-O.webp', 8, false, 0),
-    new Article('Volleyball Ball', 'https://media.istockphoto.com/id/145922285/es/foto/aislado-de-voleibol.jpg?s=612x612&w=0&k=20&c=y5zSWmKW1UWurYKOfkl9Do259c6GexK-tl0SLJjwXDU=', 9, true, 1)
-  ]
+  onChangeQuantity(dataArticle: ArticleQuantityChange) {
+    this.articleService.changeQuantity(dataArticle.article.name, dataArticle.units);
+  }
+  
 }
