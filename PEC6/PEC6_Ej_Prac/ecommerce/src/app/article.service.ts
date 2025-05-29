@@ -43,7 +43,7 @@ export class ArticleService {
       return ObservableOf(true);
     }
     else {
-      return ObservableOf(false);
+      return ObservableThrow({msg: 'Article not found'});
     }
   }
 }
