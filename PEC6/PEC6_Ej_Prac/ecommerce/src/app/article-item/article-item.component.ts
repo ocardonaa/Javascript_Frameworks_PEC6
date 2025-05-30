@@ -1,45 +1,26 @@
-import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Article } from '../model/article';
-import { ArticleQuantityChange } from '../model/ArticleQuantityChange';
+import { ArticleService } from '../article.service';
 
 @Component({
   selector: 'app-article-item',
   templateUrl: './article-item.component.html',
-  styleUrl: './article-item.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './article-item.component.css'
 })
-export class ArticleItemComponent implements OnInit {
+export class ArticleItemComponent {
 
+  @Input()
+
+  public article: Article;
   public articleClasses;
   public priceClasses;
 
-  @Input() article: Article;
-  @Output() emitQuantityChange = new EventEmitter<ArticleQuantityChange>();
-
-  emitData(quantity: number) {
-    const data: ArticleQuantityChange = {
-      article: this.article,
-      units: this.article.quantityInCart + quantity
-    };
-    this.emitQuantityChange.emit(data);
-  }
-  constructor() {
+  constructor(private articleService: ArticleService) {
 
   }
 
   onChangeQuantity(event: Event, change: number) {
-    event.preventDefault();
-    this.emitData(change);
-  }
-
-  ngOnInit() {
-    this.articleClasses = {
-      'available': this.article.isOnSale,
-      'unavailable': !this.article.isOnSale
-    }
-    this.priceClasses = {
-      'available-price': this.article.isOnSale,
-      'unavailable-price': !this.article.isOnSale
-    }
+    this.articleService.changeQuantity(this.article.id, change)
+      .subscribe((article) => this.article.quantityInCart = change);
   }
 }

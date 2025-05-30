@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Article } from '../model/article';
 
 @Component({
@@ -10,7 +10,7 @@ import { Article } from '../model/article';
 export class ArticleNewTemplateComponent {
   public article: Article;
   constructor() {
-    this.article = new Article('test-article', '', 0, false, 1);
+    this.article = new Article(0, 'test-article', '', 0, false, 1);
   }
 
   createArticle(articleForm: { valid: any; value: { article: Article; }; }) {

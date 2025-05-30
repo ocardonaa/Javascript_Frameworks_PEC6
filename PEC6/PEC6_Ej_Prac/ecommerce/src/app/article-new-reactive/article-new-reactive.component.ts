@@ -27,6 +27,18 @@ export class ArticleNewReactiveComponent {
       onSale: new FormControl(false),
       price: new FormControl(null, [Validators.required, this.priceValidator, Validators.min(0.1)])
     })
+    this.initializeArticle();
+  }
+
+  initializeArticle() {
+    this.article =  {
+      name: '',
+      id: 0,
+      price: 0,
+      isOnSale: false,
+      quantityInCart: 0,
+      imageUrl: ''
+    };
   }
 
   onSubmit() {
@@ -41,7 +53,7 @@ export class ArticleNewReactiveComponent {
       //console.log(articleToCreate);
       this.articleService.createArticle(articleToCreate).subscribe((result: any) => {
         this.message = result.msg;
-        this.article = new Article('test-article', '', 0, false, 0);
+        this.initializeArticle();
       }, (err: { msg: any; }) => {
         this.message = err.msg;
       })

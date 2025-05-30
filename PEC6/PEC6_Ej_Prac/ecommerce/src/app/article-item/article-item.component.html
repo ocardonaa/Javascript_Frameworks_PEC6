@@ -5,8 +5,8 @@
     <div class="image"><img src={{article.imageUrl}}></div>
     <div class="price" [ngClass]="priceClasses">{{article.price}}$</div>
     <div class="quantity" *ngIf="article.isOnSale">
-        <button class="minus" (click)="emitData(-1)">-</button>
+        <button class="minus" (click)="onChangeQuantity($event, -1)">-</button>
         <h3 class="quantity-text">{{article.quantityInCart}}</h3>
-        <button class="plus" (click)="emitData(1)">+</button>
+        <button class="plus" (click)="onChangeQuantity($event, 1)">+</button>
     </div>
 </div>
