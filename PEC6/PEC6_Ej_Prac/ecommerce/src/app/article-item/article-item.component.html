@@ -2,8 +2,8 @@
     <div class="name">
         <h3>{{article.name}}</h3>
     </div>
-    <div class="image"><img src="../{{article.imageUrl}}"></div>
-    <div class="price" [ngClass]="priceClasses">{{article.price}}$</div>
+    <div class="image"><img src="../{{article.imageUrl | defaultPhoto}}"></div>
+    <div class="price" [ngClass]="priceClasses">{{article.price | formatPrice}}</div>
     <div class="quantity" *ngIf="article.isOnSale">
         <button class="minus" (click)="onChangeQuantity($event, -1)">-</button>
         <h3 class="quantity-text">{{article.quantityInCart}}</h3>

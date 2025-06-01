@@ -12,6 +12,8 @@ import { ArticleNewReactiveComponent } from './article-new-reactive/article-new-
 import { InicioComponent } from './inicio/inicio.component';
 import { ArticleService } from './article.service';
 import { HttpClientModule } from '@angular/common/http';
+import { PricePipe } from './article-item/price.pipe';
+import { ImagePipe } from './article-item/image.pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { HttpClientModule } from '@angular/common/http';
     NavbarComponent,
     ArticleNewTemplateComponent,
     ArticleNewReactiveComponent,
-    InicioComponent
+    InicioComponent,
+    PricePipe,
+    ImagePipe
   ],
   imports: [
     BrowserModule,
