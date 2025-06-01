@@ -44,13 +44,6 @@ export class ArticleNewReactiveComponent {
   onSubmit() {
     if (this.articleForm.valid) {
       const articleToCreate = this.articleForm.value;
-      if (articleToCreate.onSale) {
-        articleToCreate['quantityInCart'] = 1;
-      }
-      else {
-        articleToCreate['quantityInCart'] = 0;
-      }
-      //console.log(articleToCreate);
       this.articleService.createArticle(articleToCreate).subscribe((result: any) => {
         this.message = result.msg;
         this.initializeArticle();

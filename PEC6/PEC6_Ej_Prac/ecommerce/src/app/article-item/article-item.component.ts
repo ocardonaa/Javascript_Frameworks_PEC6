@@ -20,7 +20,12 @@ export class ArticleItemComponent {
   }
 
   onChangeQuantity(event: Event, change: number) {
+    const newQuantity = this.article.quantityInCart + change;
+    if (newQuantity < 0) {
+      console.log('There cannot be negative quantities in the cart');
+      return;
+    }
     this.articleService.changeQuantity(this.article.id, change)
-      .subscribe((article) => this.article.quantityInCart = change);
+      .subscribe((newArticle) => { this.article.quantityInCart = newArticle.quantityInCart });
   }
 }
